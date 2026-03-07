@@ -15,6 +15,22 @@
   align-items: flex-start;
 }
 
+.logo {
+  margin-bottom: 32px;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.logoName {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.logoDot {
+  color: #00C46A;
+  font-weight: 700;
+}
+
 .headline {
   font-family: var(--font-serif), Georgia, serif;
   font-size: clamp(2rem, 5vw, 3.25rem);

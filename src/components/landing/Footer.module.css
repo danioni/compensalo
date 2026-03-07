@@ -29,7 +29,16 @@
 
 .brand {
   color: var(--text-secondary);
-  font-weight: 500;
+  font-weight: 700;
+}
+
+.brandDot {
+  color: #00C46A;
+  font-weight: 700;
+}
+
+.brandSep {
+  color: var(--text-tertiary);
 }
 
 .links {

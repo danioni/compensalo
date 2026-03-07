@@ -21,9 +21,29 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Compensalo — Protocolo de reconciliación financiera",
+  metadataBase: new URL("https://compensalo.com"),
+  title: "Compensalo — Reconciliación financiera automática",
   description:
-    "Reconcilia automáticamente tus pagos contra tus movimientos bancarios. Sin Excel. Sin discrepancias sin resolver.",
+    "El protocolo que reconcilia automáticamente tus pagos contra tus movimientos bancarios. Sin Excel. Sin discrepancias.",
+  icons: {
+    icon: { url: "/favicon.svg", type: "image/svg+xml" },
+  },
+  openGraph: {
+    title: "Compensalo — Reconciliación financiera automática",
+    description:
+      "El protocolo que reconcilia automáticamente tus pagos contra tus movimientos bancarios. Sin Excel. Sin discrepancias.",
+    siteName: "Compensalo",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Compensalo — Reconciliación financiera automática",
+    description:
+      "El protocolo que reconcilia automáticamente tus pagos contra tus movimientos bancarios. Sin Excel. Sin discrepancias.",
+  },
+  other: {
+    "theme-color": "#0A0A0A",
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +53,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        <meta name="theme-color" content="#0A0A0A" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
       >

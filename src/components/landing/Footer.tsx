@@ -5,8 +5,10 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={`container ${styles.inner}`}>
         <p className={styles.tagline}>
-          <span className={styles.brand}>Compensalo</span> · Protocolo abierto
-          de reconciliación financiera
+          <span className={styles.brand}>compensalo</span>
+          <span className={styles.brandDot}>.com</span>
+          <span className={styles.brandSep}> · </span>
+          Protocolo abierto de reconciliación financiera
         </p>
         <nav className={styles.links}>
           <a href="/docs">Documentación</a>

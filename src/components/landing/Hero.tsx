@@ -5,7 +5,10 @@ export default function Hero() {
   return (
     <section className={styles.hero}>
       <div className={`container ${styles.inner}`}>
-        <p className="section-label mono">Reconciliación financiera</p>
+        <div className={styles.logo}>
+          <span className={styles.logoName}>compensalo</span>
+          <span className={styles.logoDot}>.com</span>
+        </div>
 
         <h1 className={styles.headline}>
           El dinero que entra siempre debe cuadrar
