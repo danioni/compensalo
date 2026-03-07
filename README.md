@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# compensalo
 
-## Getting Started
+Protocolo abierto de reconciliacion financiera. Recibe eventos de pagos y movimientos bancarios via webhooks, los cruza automaticamente, y expone el estado de reconciliacion a traves de una API REST.
 
-First, run the development server:
+**[compensalo.com](https://www.compensalo.com)**
+
+## Stack
+
+- **Framework**: Next.js 16 + TypeScript
+- **Base de datos**: PostgreSQL (Supabase) + Prisma 6
+- **Deploy**: Vercel
+- **Analytics**: Vercel Analytics
+
+## Setup local
 
 ```bash
+# Clonar e instalar
+git clone https://github.com/danioni/compensalo.git
+cd compensalo
+npm install
+
+# Configurar variables de entorno
+cp .env.example .env.local
+# Editar .env.local con tus credenciales
+
+# Sincronizar schema con la base de datos
+npx prisma db push
+
+# Iniciar servidor de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Descripcion |
+| --- | --- |
+| `DATABASE_URL` | Connection string de PostgreSQL (pooled) |
+| `DIRECT_URL` | Connection string directa (para migraciones) |
+| `HABILITALO_WEBHOOK_SECRET` | Secret HMAC-SHA256 para verificar webhooks |
+| `NEXT_PUBLIC_APP_URL` | URL publica de la app |
+| `HABILITALO_BASE_URL` | URL base de la API de Habilitalo |
+| `COMPENSALO_WEBHOOK_URL` | URL del webhook de Compensalo |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## API Endpoints
 
-## Learn More
+| Metodo | Ruta | Descripcion |
+| --- | --- | --- |
+| `POST` | `/api/webhook/habilitalo` | Recibe eventos de movimientos bancarios |
+| `GET` | `/api/positions` | Lista posiciones de reconciliacion con filtros |
+| `GET` | `/api/positions/summary` | Resumen por estado |
+| `POST` | `/api/positions/[id]/force-match` | Match manual de posicion con pago |
+| `POST` | `/api/positions/[id]/flag-exception` | Marcar posicion como excepcion |
+| `POST` | `/api/waitlist` | Registrar email en lista de espera |
 
-To learn more about Next.js, take a look at the following resources:
+## Protocolo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+El motor de matching funciona asi:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Un evento `bank.movement.created` llega al webhook
+2. Se crea una `ReconciliationPosition` con estado `UNMATCHED`
+3. El matching engine busca `PaymentRecord` candidatos (mismo monto, ventana de 3 dias)
+4. Si hay un unico candidato: match `EXACT` (score 1.0)
+5. Si hay multiples: match `FUZZY` con el mas cercano por fecha (score 0.7)
+6. Se actualizan posicion, pago y evento en una transaccion atomica
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run dev          # Servidor de desarrollo
+npm run build        # Build de produccion
+npm run db:generate  # Regenerar Prisma Client
+npm run db:push      # Sincronizar schema con DB
+npm run db:migrate   # Correr migraciones
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Licencia
+
+Proyecto privado.

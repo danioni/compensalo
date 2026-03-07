@@ -13,7 +13,7 @@ export default function Footer() {
         <nav className={styles.links}>
           <a href="/docs">Documentación</a>
           <a
-            href="https://github.com/compensalo"
+            href="https://github.com/danioni/compensalo"
             target="_blank"
             rel="noopener noreferrer"
           >
