@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["compensalo"]
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────
+
+enum EventStatus {
+  RECEIVED
+  PROCESSING
+  MATCHED
+  UNMATCHED
+  ERROR
+
+  @@schema("compensalo")
+}
+
+enum MovementType {
+  CREDIT
+  DEBIT
+
+  @@schema("compensalo")
+}
+
+enum PositionStatus {
+  UNMATCHED
+  PENDING_MATCH
+  MATCHED
+  SETTLED
+  DISPUTED
+  EXCEPTION
+
+  @@schema("compensalo")
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  RECONCILED
+  DISPUTED
+
+  @@schema("compensalo")
+}
+
+enum MatchType {
+  EXACT
+  FUZZY
+  MANUAL
+
+  @@schema("compensalo")
+}
+
+// ─── Models ──────────────────────────────────────────────────────────
+
+model CompensaloEvent {
+  id             String      @id @default(cuid())
+  eventId        String      @unique
+  eventType      String
+  source         String
+  rawPayload     Json
+  receivedAt     DateTime    @default(now())
+  status         EventStatus @default(RECEIVED)
+  organizationId String
+
+  @@index([organizationId])
+  @@index([eventType])
+  @@index([status])
+  @@schema("compensalo")
+}
+
+model ReconciliationPosition {
+  id              String         @id @default(cuid())
+  organizationId  String
+  movementId      String         @unique
+  journalEntryId  String
+  amount          Decimal        @db.Decimal(18, 2)
+  currency        String         @default("CLP")
+  date            DateTime
+  description     String
+  counterparty    String?
+  type            MovementType
+  categoryId      String?
+  categorySource  String?
+  status          PositionStatus @default(UNMATCHED)
+  matchedPaymentId String?       @unique
+  matchedAt       DateTime?
+  settledAt       DateTime?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  matchedPayment  PaymentRecord?  @relation("PositionPayment", fields: [matchedPaymentId], references: [id])
+  matches         ReconciliationMatch[]
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([organizationId, status])
+  @@index([date])
+  @@schema("compensalo")
+}
+
+model PaymentRecord {
+  id             String        @id @default(cuid())
+  organizationId String
+  externalId     String
+  source         String
+  amount         Decimal       @db.Decimal(18, 2)
+  currency       String        @default("CLP")
+  paidAt         DateTime
+  description    String?
+  clientId       String?
+  status         PaymentStatus @default(PENDING)
+  positionId     String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  position       ReconciliationPosition? @relation("PositionPayment")
+  matches        ReconciliationMatch[]
+
+  @@unique([externalId, source])
+  @@index([organizationId])
+  @@index([status])
+  @@index([organizationId, status])
+  @@index([paidAt])
+  @@schema("compensalo")
+}
+
+model ReconciliationMatch {
+  id             String    @id @default(cuid())
+  organizationId String
+  positionId     String
+  paymentId      String
+  matchType      MatchType
+  matchScore     Float
+  matchedBy      String?
+  matchedAt      DateTime  @default(now())
+  notes          String?
+
+  position       ReconciliationPosition @relation(fields: [positionId], references: [id])
+  payment        PaymentRecord          @relation(fields: [paymentId], references: [id])
+
+  @@index([organizationId])
+  @@index([positionId])
+  @@index([paymentId])
+  @@schema("compensalo")
+}
+
+// ─── Waitlist ─────────────────────────────────────────────────────────
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@schema("compensalo")
+}

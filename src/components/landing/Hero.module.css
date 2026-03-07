@@ -1,0 +1,133 @@
+.hero {
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 120px 0 80px;
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.headline {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.italic {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.sub {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 64px;
+}
+
+@media (min-width: 768px) {
+  .ctas {
+    margin-bottom: 80px;
+  }
+}
+
+.docsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+
+.docsLink:hover {
+  color: var(--text-primary);
+}
+
+/* ─── Flow diagram ─────────────────────────────────────────── */
+
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 600px) {
+  .flow {
+    gap: 8px;
+  }
+
+  .flowArrow svg {
+    width: 24px;
+  }
+}
+
+.flowStep {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.flowStepAccent {
+  border-color: var(--accent-border);
+  background: var(--accent-dim);
+}
+
+.flowIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.flowStepAccent .flowIcon {
+  color: var(--accent);
+}
+
+.flowLabel {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.flowStepAccent .flowLabel {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.flowArrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(tasklist)",
+      "Bash(npx tsx --eval \"import ''./scripts/register-compensalo-webhook.ts''\")",
+      "Bash(npx prisma generate)",
+      "Bash(findstr -i node)",
+      "Bash(cmd /c \"npx prisma generate\")",
+      "Bash(powershell -Command \"Remove-Item -Force ''src/generated/prisma/query_engine-windows.dll.node'' -ErrorAction SilentlyContinue; npx prisma generate 2>&1\")",
+      "Bash(npm run build)"
+    ]
+  }
+}
