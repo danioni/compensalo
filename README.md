@@ -4,6 +4,16 @@ Protocolo abierto de reconciliacion financiera. Recibe eventos de pagos y movimi
 
 **[compensalo.com](https://www.compensalo.com)**
 
+## Vision del producto
+
+Compensalo es el motor de pagos del ecosistema Digitalo. Gestiona el pipeline completo desde que entra un pago hasta que queda liquidado entre las partes. Sus responsabilidades son:
+
+1. **Reconciliacion bancaria** — matching de transferencias entrantes contra cobros registrados.
+2. **Liquidacion** — ejecucion de la distribucion de ingresos una vez confirmado el pago.
+3. **Compensacion** — registro de saldos entre profesionales y la organizacion.
+
+Compensalo no define las reglas de distribucion — esas viven en Planificalo. Compensalo las consulta y las ejecuta. El trigger siempre es un evento de pago real.
+
 ## Stack
 
 - **Framework**: Next.js 16 + TypeScript
