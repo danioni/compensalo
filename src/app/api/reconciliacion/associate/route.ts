@@ -1,50 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-interface ForceMatchBody {
-  paymentId: string;
-  notes: string;
-  clientName: string;
-  clientId?: string;
-  clientEmail?: string;
+interface AssociateBody {
+  transactionId: string;
+  cobroId: string;
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const { id: positionId } = await params;
-
-  let body: ForceMatchBody;
+/**
+ * POST /api/reconciliacion/associate
+ * Associates an UNMATCHED position with a pending PaymentRecord (cobro).
+ * Creates a ReconciliationMatch, updates both records, and upserts AccountIdentity.
+ */
+export async function POST(request: NextRequest) {
+  let body: AssociateBody;
   try {
-    body = await request.json() as ForceMatchBody;
+    body = (await request.json()) as AssociateBody;
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  if (!body.paymentId || typeof body.paymentId !== "string") {
+  if (!body.transactionId || !body.cobroId) {
     return NextResponse.json(
-      { error: "paymentId is required" },
-      { status: 400 }
-    );
-  }
-
-  if (!body.notes || typeof body.notes !== "string" || body.notes.trim().length === 0) {
-    return NextResponse.json(
-      { error: "notes is required for audit trail" },
-      { status: 400 }
-    );
-  }
-
-  if (!body.clientName || typeof body.clientName !== "string" || body.clientName.trim().length === 0) {
-    return NextResponse.json(
-      { error: "clientName is required" },
+      { error: "transactionId and cobroId are required" },
       { status: 400 }
     );
   }
 
   const position = await prisma.reconciliationPosition.findUnique({
-    where: { id: positionId },
+    where: { id: body.transactionId },
   });
   if (!position) {
     return NextResponse.json(
@@ -52,21 +35,27 @@ export async function POST(
       { status: 404 }
     );
   }
+  if (position.status !== "UNMATCHED") {
+    return NextResponse.json(
+      { error: "Position is not in UNMATCHED status" },
+      { status: 409 }
+    );
+  }
 
   const payment = await prisma.paymentRecord.findUnique({
-    where: { id: body.paymentId },
+    where: { id: body.cobroId },
   });
   if (!payment) {
     return NextResponse.json(
-      { error: "Payment not found" },
+      { error: "Payment record (cobro) not found" },
       { status: 404 }
     );
   }
 
   const now = new Date();
-  const userId = "manual"; // TODO: extract userId from auth
+  const userId = "manual"; // TODO: from auth
 
-  // 1. Create the reconciliation match
+  // 1. Create match + update position + update payment in a transaction
   const [match] = await prisma.$transaction([
     prisma.reconciliationMatch.create({
       data: {
@@ -77,7 +66,7 @@ export async function POST(
         matchScore: 1.0,
         matchedBy: userId,
         matchedAt: now,
-        notes: body.notes,
+        notes: "Asociación manual desde cola UNMATCHED",
       },
     }),
     prisma.reconciliationPosition.update({
@@ -97,9 +86,12 @@ export async function POST(
     }),
   ]);
 
-  // 2. Learn: create or update AccountIdentity
+  // 2. Upsert AccountIdentity for learning
   const holderName = position.counterparty;
   if (holderName) {
+    const clientName =
+      payment.description ?? payment.clientId ?? holderName;
+
     const existing = await prisma.accountIdentity.findUnique({
       where: {
         organizationId_holderName: {
@@ -115,9 +107,8 @@ export async function POST(
         data: {
           matchCount: { increment: 1 },
           lastMatchedAt: now,
-          clientName: body.clientName,
-          clientId: body.clientId ?? existing.clientId,
-          clientEmail: body.clientEmail ?? existing.clientEmail,
+          clientName,
+          clientId: payment.clientId ?? existing.clientId,
         },
       });
     } else {
@@ -125,14 +116,16 @@ export async function POST(
         data: {
           organizationId: position.organizationId,
           holderName,
-          clientName: body.clientName,
-          clientId: body.clientId,
-          clientEmail: body.clientEmail,
+          clientName,
+          clientId: payment.clientId,
           createdBy: userId,
         },
       });
     }
   }
 
-  return NextResponse.json(match, { status: 201 });
+  return NextResponse.json(
+    { success: true, matchId: match.id },
+    { status: 200 }
+  );
 }

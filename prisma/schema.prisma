@@ -91,9 +91,12 @@ model ReconciliationPosition {
   matchedPaymentId String?       @unique
   matchedAt       DateTime?
   settledAt       DateTime?
-  notes           String?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  notes               String?
+  suggestedClientName String?
+  suggestedClientId   String?
+  suggestionSource    String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 
   matchedPayment  PaymentRecord?  @relation("PositionPayment", fields: [matchedPaymentId], references: [id])
   matches         ReconciliationMatch[]
@@ -148,6 +151,36 @@ model ReconciliationMatch {
   @@index([organizationId])
   @@index([positionId])
   @@index([paymentId])
+  @@schema("compensalo")
+}
+
+// ─── Account Identity (Sprint 4 — learning) ─────────────────────────
+
+model AccountIdentity {
+  id             String   @id @default(cuid())
+  organizationId String
+
+  // Datos de la cuenta origen (vienen de Fintoc via counterparty)
+  accountNumber  String?
+  holderName     String
+  bankName       String?
+
+  // A quién se mapea
+  clientId       String?
+  clientName     String
+  clientEmail    String?
+
+  // Metadata de aprendizaje
+  matchCount     Int      @default(1)
+  lastMatchedAt  DateTime @default(now())
+  createdBy      String
+  confirmedAt    DateTime @default(now())
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([organizationId, holderName])
+  @@index([organizationId, holderName])
   @@schema("compensalo")
 }
 

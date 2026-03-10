@@ -86,3 +86,538 @@ input {
   color: var(--accent);
   margin-bottom: 16px;
 }
+
+/* ─── Reconciliación page ────────────────────────────────────── */
+
+.recon-page {
+  min-height: 100vh;
+}
+
+.recon-header {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+
+.recon-header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recon-logo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.recon-logo-dot {
+  color: var(--accent);
+}
+
+.recon-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.recon-main {
+  padding: 48px 0;
+}
+
+.recon-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.recon-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.recon-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+}
+
+.recon-count {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+/* Table */
+
+.recon-table {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.recon-table-header {
+  display: grid;
+  grid-template-columns: 120px 120px 1fr 180px 100px;
+  padding: 12px 20px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.recon-row {
+  display: grid;
+  grid-template-columns: 120px 120px 1fr 180px 100px;
+  padding: 16px 20px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+.recon-row:last-child {
+  border-bottom: none;
+}
+
+.recon-row:hover {
+  background: var(--bg-secondary);
+}
+
+.recon-cell {
+  font-size: 0.9rem;
+}
+
+.recon-date {
+  color: var(--text-secondary);
+}
+
+.recon-amount {
+  font-weight: 600;
+}
+
+.recon-holder {
+  color: var(--text-primary);
+}
+
+/* Badges */
+
+.recon-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.recon-badge-new {
+  background: rgba(234, 179, 8, 0.12);
+  color: var(--yellow);
+  border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+.recon-badge-suggestion {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+
+/* Buttons */
+
+.recon-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.recon-btn:not(.recon-btn-secondary):not(.recon-btn-primary) {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.recon-btn:not(.recon-btn-secondary):not(.recon-btn-primary):hover {
+  border-color: var(--accent-border);
+  background: var(--accent-dim);
+}
+
+.recon-btn-primary {
+  background: var(--accent);
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+.recon-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.recon-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recon-btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.recon-btn-secondary:hover {
+  border-color: var(--border-hover);
+}
+
+/* Modal */
+
+.recon-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.recon-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 460px;
+  width: 90%;
+}
+
+.recon-modal h3 {
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+
+.recon-modal-detail {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.recon-modal-question {
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.recon-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.recon-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.recon-field span {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.recon-field input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: border-color 0.15s;
+}
+
+.recon-field input:focus {
+  border-color: var(--accent-border);
+  outline: none;
+}
+
+/* States */
+
+.recon-loading {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 80px 0;
+}
+
+.recon-error {
+  text-align: center;
+  color: var(--red);
+  padding: 80px 0;
+}
+
+.recon-empty {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.recon-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.recon-empty h2 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.recon-empty p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Toast */
+
+.recon-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #0a0a0a;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 200;
+  animation: toast-in 0.3s ease;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ─── Metrics bar ────────────────────────────────────────────── */
+
+.recon-metrics {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.recon-metric-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-card);
+  min-width: 100px;
+}
+
+.recon-metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.recon-metric-warn .recon-metric-value {
+  color: var(--yellow);
+}
+
+.recon-metric-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Holder sub-lines ───────────────────────────────────────── */
+
+.recon-holder-name {
+  display: block;
+}
+
+.recon-holder-desc {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+/* ─── Tabs ───────────────────────────────────────────────────── */
+
+.recon-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin: 20px 0 16px;
+}
+
+.recon-tab {
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+
+.recon-tab:hover {
+  color: var(--text-primary);
+}
+
+.recon-tab-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ─── Wide modal ─────────────────────────────────────────────── */
+
+.recon-modal-wide {
+  max-width: 560px;
+}
+
+.recon-modal-desc {
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+}
+
+.recon-modal-question {
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+/* ─── Cobro search ───────────────────────────────────────────── */
+
+.recon-search-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.recon-field-sm {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.recon-cobro-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.recon-cobro-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.recon-cobro-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.recon-cobro-item:last-child {
+  border-bottom: none;
+}
+
+.recon-cobro-item:hover {
+  background: var(--bg-secondary);
+}
+
+.recon-cobro-selected {
+  background: var(--accent-dim);
+  border-left: 3px solid var(--accent);
+}
+
+.recon-cobro-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.recon-cobro-amount {
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.recon-cobro-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recon-cobro-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.recon-cobro-source {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .recon-table-header {
+    display: none;
+  }
+
+  .recon-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .recon-action {
+    text-align: right;
+  }
+
+  .recon-metrics {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .recon-metric-card {
+    flex: 1;
+    min-width: 80px;
+    padding: 12px 16px;
+  }
+
+  .recon-search-row {
+    flex-direction: column;
+  }
+
+  .recon-modal-wide {
+    max-width: 95%;
+  }
+}

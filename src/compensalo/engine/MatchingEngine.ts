@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { BankMovementCreatedPayload } from "@/compensalo/types/events";
+import { suggestMatch } from "./SuggestionEngine";
 
 const MATCH_WINDOW_DAYS = 3;
 
@@ -60,7 +61,19 @@ export async function processEvent(compensaloEventId: string): Promise<void> {
     });
 
     if (candidates.length === 0) {
-      // No match found
+      // No match found — try suggestion engine
+      const suggestion = await suggestMatch(position);
+      if (suggestion) {
+        await prisma.reconciliationPosition.update({
+          where: { id: position.id },
+          data: {
+            suggestedClientName: suggestion.clientName,
+            suggestedClientId: suggestion.clientId,
+            suggestionSource: "account_identity",
+          },
+        });
+      }
+
       await prisma.compensaloEvent.update({
         where: { id: event.id },
         data: { status: "UNMATCHED" },

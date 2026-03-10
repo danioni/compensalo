@@ -54,5 +54,20 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json(summary);
+  // Auto-match metric: count EXACT/FUZZY matches vs total matched
+  const autoMatchCount = await prisma.reconciliationMatch.count({
+    where: {
+      organizationId,
+      matchType: { in: ["EXACT", "FUZZY"] },
+    },
+  });
+
+  const totalMatched = summary.matched.count;
+  const autoMatchPct =
+    totalMatched > 0 ? Math.round((autoMatchCount / totalMatched) * 100) : 0;
+
+  return NextResponse.json({
+    ...summary,
+    autoMatch: { count: autoMatchCount, total: totalMatched, pct: autoMatchPct },
+  });
 }
